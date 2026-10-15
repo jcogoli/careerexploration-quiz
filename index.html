@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Exploration Quizzes</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f5fa;
+      color: #243247;
+      margin: 0;
+      line-height: 1.6;
+    }
+
+    header {
+      background: #17365d;
+      color: white;
+      text-align: center;
+      padding: 45px 20px;
+    }
+
+    header h1 {
+      margin-top: 0;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 35px auto;
+      padding: 20px;
+    }
+
+    .quizzes {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 3px 12px #00000012;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card h2 {
+      color: #17365d;
+      margin-top: 0;
+    }
+
+    .age {
+      font-weight: bold;
+      color: #1769aa;
+    }
+
+    .card a {
+      display: block;
+      background: #1769aa;
+      color: white;
+      text-decoration: none;
+      text-align: center;
+      padding: 12px;
+      border-radius: 7px;
+      font-weight: bold;
+      margin-top: auto;
+    }
+
+    .card a:hover {
+      background: #104d80;
+    }
+
+    .card p {
+      margin-bottom: 20px;
+    }
+
+    .note {
+      margin-top: 25px;
+      padding: 15px;
+      background: #e2eaf5;
+      border-radius: 8px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #526176;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Career Exploration</h1>
+    <p>Discover your interests, strengths, and career possibilities.</p>
+  </header>
+
+  <main>
+    <h2 style="text-align:center;">Choose Your Quiz</h2>
+    <p style="text-align:center;">
+      Select the quiz that matches your age group.
+    </p>
+
+    <section class="quizzes">
+      <article class="card">
+        <h2>Youth Career Exploration</h2>
+        <p class="age">Ages 9–16</p>
+        <p>
+          Explore your interests, identify your strengths, and discover
+          career fields you might enjoy.
+        </p>
+        <a href="youth-career-exploration-quiz.html">
+          Start Youth Quiz
+        </a>
+      </article>
+
+      <article class="card">
+        <h2>Adult Career Exploration</h2>
+        <p class="age">Ages 18 and older</p>
+        <p>
+          Explore career interests, work values, transferable skills,
+          training options, and possible career paths.
+        </p>
+        <a href="adult-career-exploration-quiz.html">
+          Start Adult Quiz
+        </a>
+      </article>
+    </section>
+
+    <div class="note">
+      <strong>Please note:</strong> These quizzes are for career
+      exploration and self-reflection. They are not formal vocational
+      assessments.
+    </div>
+  </main>
+
+  <footer>
+    Career Exploration | Discover your possibilities
+  </footer>
+
+</body>
+</html>
