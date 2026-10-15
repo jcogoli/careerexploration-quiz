@@ -1,0 +1,346 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Career Exploration Quiz</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    max-width: 850px;
+    margin: 25px auto;
+    padding: 20px;
+    line-height: 1.5;
+    color: #202938;
+    background: #f4f7fb;
+  }
+  h1, h2 { color: #173e68; }
+  .intro, .question, .result {
+    background: white;
+    padding: 18px;
+    margin: 16px 0;
+    border-radius: 10px;
+    border: 1px solid #d5deea;
+  }
+  .option {
+    display: block;
+    padding: 9px;
+    margin: 5px 0;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .option:hover { background: #eef4fb; }
+  input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.15);
+  }
+  button {
+    background: #173e68;
+    color: white;
+    border: 0;
+    border-radius: 7px;
+    padding: 12px 18px;
+    margin: 8px 8px 8px 0;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  button:hover { background: #245b91; }
+  .muted { color: #536276; font-size: 14px; }
+  .career-list { margin-top: 6px; }
+  .hidden { display: none; }
+  @media print {
+    body { background: white; margin: 0; }
+    button { display: none; }
+    .question { display: none; }
+    .intro { display: none; }
+    .result { border: 1px solid #aaa; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Discover Your Career Interests!</h1>
+
+<div class="intro">
+  <p>
+    What do you enjoy doing? This quiz helps you explore careers
+    that may match your interests, strengths, and favorite activities.
+  </p>
+  <p><strong>Instructions:</strong> Select every answer that sounds
+    like you. You can choose more than one answer for each question.
+    There are no right or wrong answers!
+  </p>
+  <p class="muted">
+    Your results are suggestions for exploration, not a test of
+    your ability or a decision about what you must become.
+  </p>
+</div>
+
+<form id="quiz"></form>
+
+<button type="button" onclick="showResults()">Show My Career Matches</button>
+<button type="button" onclick="resetQuiz()">Start Over</button>
+
+<div id="results" class="hidden"></div>
+
+<script>
+const families = {
+  T: {
+    name: "Technology & Problem-Solving",
+    description: "You may enjoy using computers, solving puzzles, finding answers, or figuring out how things work.",
+    careers: [
+      "IT support technician",
+      "Software developer",
+      "Cybersecurity analyst",
+      "Data analyst",
+      "Computer technician"
+    ]
+  },
+  C: {
+    name: "Creative Arts & Communication",
+    description: "You may enjoy creating things, sharing ideas, telling stories, or expressing yourself.",
+    careers: [
+      "Graphic designer",
+      "Animator",
+      "Photographer",
+      "Writer",
+      "Video producer",
+      "Marketing designer"
+    ]
+  },
+  H: {
+    name: "Helping People & Community",
+    description: "You may enjoy supporting others, teaching, listening, or making your community better.",
+    careers: [
+      "Teacher",
+      "Nurse",
+      "Counselor",
+      "Social worker",
+      "Youth program coordinator",
+      "Community outreach worker"
+    ]
+  },
+  M: {
+    name: "Building, Science & Engineering",
+    description: "You may enjoy experimenting, building, designing, repairing, or understanding the world around you.",
+    careers: [
+      "Engineer",
+      "Electrician",
+      "Robotics technician",
+      "Scientist",
+      "Architect",
+      "Construction professional"
+    ]
+  },
+  B: {
+    name: "Business, Leadership & Organization",
+    description: "You may enjoy organizing projects, making plans, leading a team, or starting new ideas.",
+    careers: [
+      "Entrepreneur",
+      "Project manager",
+      "Event planner",
+      "Operations coordinator",
+      "Business owner",
+      "Team supervisor"
+    ]
+  }
+};
+
+const questions = [
+  {
+    title: "1. Which activities sound fun to you?",
+    options: [
+      ["T", "Solving computer problems or playing logic games"],
+      ["C", "Drawing, making videos, or telling stories"],
+      ["H", "Helping someone learn something new"],
+      ["M", "Building models, doing experiments, or fixing things"],
+      ["B", "Planning an event or organizing a group activity"]
+    ]
+  },
+  {
+    title: "2. What would you enjoy doing for a school project?",
+    options: [
+      ["T", "Creating a website or learning a new app"],
+      ["C", "Designing a poster, video, or presentation"],
+      ["H", "Creating a project that helps other people"],
+      ["M", "Building a model or testing how something works"],
+      ["B", "Leading the team and organizing the tasks"]
+    ]
+  },
+  {
+    title: "3. When something stops working, what interests you?",
+    options: [
+      ["T", "Finding the computer setting or software problem"],
+      ["C", "Thinking of a creative way to improve it"],
+      ["H", "Helping the person who is having trouble"],
+      ["M", "Taking a closer look at the parts and how they work"],
+      ["B", "Making a plan to get the problem solved"]
+    ]
+  },
+  {
+    title: "4. Which place would you most like to explore?",
+    options: [
+      ["T", "A computer lab or technology company"],
+      ["C", "An art studio, film set, or design studio"],
+      ["H", "A school, hospital, or community center"],
+      ["M", "A science lab, workshop, or construction site"],
+      ["B", "A business office or event-planning space"]
+    ]
+  },
+  {
+    title: "5. What role do you often enjoy in a group?",
+    options: [
+      ["T", "The person who figures out technical problems"],
+      ["C", "The person with ideas for how it should look or sound"],
+      ["H", "The person who encourages and supports others"],
+      ["M", "The person who builds, tests, or demonstrates things"],
+      ["B", "The person who makes the plan and keeps everyone organized"]
+    ]
+  },
+  {
+    title: "6. Which subject or activity interests you most?",
+    options: [
+      ["T", "Computers, coding, or digital tools"],
+      ["C", "Art, music, writing, or media"],
+      ["H", "People, health, teaching, or community service"],
+      ["M", "Science, math, design, or hands-on projects"],
+      ["B", "Business, leadership, or planning"]
+    ]
+  },
+  {
+    title: "7. You have a free afternoon. What might you choose?",
+    options: [
+      ["T", "Exploring a new app, game, or computer skill"],
+      ["C", "Making art, editing a video, or writing a story"],
+      ["H", "Helping someone or volunteering"],
+      ["M", "Building something or trying an experiment"],
+      ["B", "Planning a club activity or starting a small project"]
+    ]
+  },
+  {
+    title: "8. Which challenge sounds exciting?",
+    options: [
+      ["T", "Figuring out why a computer or program has a problem"],
+      ["C", "Creating something original that gets people's attention"],
+      ["H", "Finding a way to make life easier for others"],
+      ["M", "Designing and testing a solution to a real-world problem"],
+      ["B", "Organizing a team to reach a goal"]
+    ]
+  },
+  {
+    title: "9. What would you like to learn?",
+    options: [
+      ["T", "How computers, networks, or online security work"],
+      ["C", "How to design, create media, or communicate ideas"],
+      ["H", "How people learn, stay healthy, or solve problems together"],
+      ["M", "How machines, buildings, or scientific discoveries work"],
+      ["B", "How businesses operate and projects succeed"]
+    ]
+  },
+  {
+    title: "10. What would make a future job interesting to you?",
+    options: [
+      ["T", "Solving new problems with technology"],
+      ["C", "Being creative and sharing my ideas"],
+      ["H", "Making a positive difference for people"],
+      ["M", "Designing, building, discovering, or repairing things"],
+      ["B", "Leading projects, organizing work, or building a business"]
+    ]
+  }
+];
+
+const quiz = document.getElementById("quiz");
+
+questions.forEach((q, qi) => {
+  const section = document.createElement("section");
+  section.className = "question";
+  const heading = document.createElement("h2");
+  heading.textContent = q.title;
+  section.appendChild(heading);
+
+  const hint = document.createElement("p");
+  hint.className = "muted";
+  hint.textContent = "Select all that apply.";
+  section.appendChild(hint);
+
+  q.options.forEach(([family, label], oi) => {
+    const optionLabel = document.createElement("label");
+    optionLabel.className = "option";
+
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.name = "q" + qi;
+    input.value = family;
+    input.id = "q" + qi + "_" + oi;
+
+    optionLabel.appendChild(input);
+    optionLabel.appendChild(document.createTextNode(label));
+    section.appendChild(optionLabel);
+  });
+
+  quiz.appendChild(section);
+});
+
+function showResults() {
+  const scores = { T: 0, C: 0, H: 0, M: 0, B: 0 };
+  let selections = 0;
+
+  document.querySelectorAll('#quiz input[type="checkbox"]:checked')
+    .forEach(input => {
+      scores[input.value]++;
+      selections++;
+    });
+
+  if (selections === 0) {
+    alert("Please select at least one answer before viewing your results.");
+    return;
+  }
+
+  const highest = Math.max(...Object.values(scores));
+  const matches = Object.keys(scores).filter(key => scores[key] === highest);
+  const sorted = Object.keys(scores).sort((a, b) => scores[b] - scores[a]);
+
+  let html = '<div class="result"><h2>Your Career Interest Results</h2>';
+  html += '<p>You selected ' + selections + ' answers. Your strongest interest area'
+       + (matches.length > 1 ? 's are' : ' is') + ' shown first.</p>';
+
+  matches.forEach(key => {
+    html += '<h2>' + families[key].name + '</h2>';
+    html += '<p>' + families[key].description + '</p>';
+    html += '<strong>Careers to explore:</strong><ul class="career-list">';
+    families[key].careers.forEach(career => {
+      html += '<li>' + career + '</li>';
+    });
+    html += '</ul>';
+  });
+
+  html += '<h2>All Your Interest Scores</h2><ul>';
+  sorted.forEach(key => {
+    html += '<li><strong>' + families[key].name + ':</strong> '
+         + scores[key] + ' selections</li>';
+  });
+  html += '</ul>';
+
+  html += '<p><strong>Think about it:</strong> Which career surprised you? '
+       + 'Which would you like to learn more about? You can have several '
+       + 'career interests, and they may change as you discover new things.</p>';
+  html += '<button type="button" onclick="window.print()">Print My Results</button>';
+  html += '</div>';
+
+  const results = document.getElementById("results");
+  results.innerHTML = html;
+  results.classList.remove("hidden");
+  results.scrollIntoView({ behavior: "smooth" });
+}
+
+function resetQuiz() {
+  document.getElementById("quiz").reset();
+  const results = document.getElementById("results");
+  results.innerHTML = "";
+  results.classList.add("hidden");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+</script>
+</body>
+</html>
