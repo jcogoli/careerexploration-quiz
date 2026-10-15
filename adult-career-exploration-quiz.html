@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A self-guided adult career exploration assessment covering work interests, values, strengths, and next steps.">
+<title>Adult Career Exploration Assessment</title>
+<style>
+:root{--navy:#173e68;--blue:#245b91;--ink:#202938;--muted:#536276;--line:#d5deea;--paper:#fff;--bg:#f4f7fb;--pale:#eaf1f9}
+*{box-sizing:border-box}
+body{font-family:Arial,Helvetica,sans-serif;max-width:1000px;margin:0 auto;padding:22px;line-height:1.55;color:var(--ink);background:var(--bg)}
+h1,h2,h3{color:var(--navy);line-height:1.25}
+h1{font-size:clamp(1.8rem,4vw,2.5rem);margin-bottom:.5rem}
+h2{margin-top:0}
+p{margin:.5rem 0 1rem}
+header,.panel,.question,.result-card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:20px;margin:16px 0}
+header{border-top:6px solid var(--navy)}
+.eyebrow{text-transform:uppercase;letter-spacing:.08em;font-size:.78rem;font-weight:700;color:var(--blue)}
+.muted{color:var(--muted);font-size:.94rem}
+.notice{background:var(--pale);border-left:4px solid var(--blue);padding:12px 14px;border-radius:5px}
+fieldset{border:0;padding:0;margin:0}
+legend{font-weight:700;font-size:1.06rem;margin-bottom:12px}
+.question-number{font-size:.82rem;color:var(--muted);font-weight:700}
+.scale{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:12px}
+.scale label{border:1px solid var(--line);border-radius:8px;padding:10px 6px;text-align:center;cursor:pointer;font-size:.9rem}
+.scale label:has(input:checked){background:var(--pale);border-color:var(--blue);box-shadow:inset 0 0 0 1px var(--blue)}
+.scale input{display:block;margin:0 auto 6px;accent-color:var(--navy)}
+.scale-word{display:block;font-size:.76rem;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.field label{display:block;font-weight:700;margin-bottom:5px}
+select,input[type=text]{width:100%;padding:11px;border:1px solid #aebdce;border-radius:7px;background:white;color:var(--ink);font:inherit}
+.check-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.check-list label{display:flex;gap:9px;align-items:flex-start;padding:10px;border:1px solid var(--line);border-radius:7px}
+input[type=checkbox]{margin-top:5px;accent-color:var(--navy)}
+button{background:var(--navy);color:white;border:0;border-radius:7px;padding:12px 18px;margin:6px 8px 6px 0;font-size:1rem;cursor:pointer}
+button:hover{background:var(--blue)}
+button.secondary{background:#e5ebf2;color:var(--ink)}
+button.secondary:hover{background:#d4dfeb}
+.hidden{display:none}
+.progress-wrap{height:8px;background:#e1e8f0;border-radius:99px;overflow:hidden;margin:12px 0}
+#progressBar{height:100%;width:0;background:var(--blue);transition:width .2s}
+.score-row{margin:12px 0}
+.score-label{display:flex;justify-content:space-between;gap:12px;font-weight:700}
+.bar{height:12px;background:#e4eaf1;border-radius:99px;overflow:hidden;margin-top:5px}
+.bar span{display:block;height:100%;background:var(--blue)}
+.result-card{break-inside:avoid}
+.tag{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:3px 9px;margin:3px 4px 3px 0;font-size:.85rem;background:#f8fafc}
+.two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.small{font-size:.9rem}
+footer{font-size:.86rem;color:var(--muted);margin:28px 0}
+@media(max-width:650px){body{padding:12px}.grid,.check-list,.two-col{grid-template-columns:1fr}.scale{gap:4px}.scale label{padding:8px 2px;font-size:.8rem}.scale-word{font-size:.67rem}header,.panel,.question,.result-card{padding:15px}}
+@media print{body{max-width:none;background:#fff;padding:0;font-size:10pt}header,.panel,.question,.result-card{box-shadow:none;border:1px solid #aaa;padding:12px;margin:10px 0}button,#assessmentForm,.no-print,footer{display:none!important}.hidden{display:none!important}#results{display:block!important}.result-card{break-inside:avoid}h1{font-size:22pt}h2{font-size:15pt}}
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Adult career exploration · Ages 18+</div>
+  <h1>Explore Your Next Career Direction</h1>
+  <p>This self-guided assessment helps you connect your interests, work values, strengths, and practical preferences to career areas worth exploring.</p>
+  <p class="notice"><strong>Important:</strong> This is a career exploration activity, not a clinical or validated vocational assessment. It does not determine what you should do or predict job success. Use the results as a starting point for research, training, and conversations with a career advisor.</p>
+  <p class="muted">Estimated time: 10–15 minutes · No account required · Your answers are processed in this browser and are not sent to a server.</p>
+  <div class="progress-wrap" aria-label="Assessment progress"><div id="progressBar"></div></div>
+  <div id="progressText" class="muted">0 of 30 interest statements answered</div>
+</header>
+
+<form id="assessmentForm">
+<section class="panel">
+  <h2>Part 1: Your current situation</h2>
+  <p class="muted">These questions help tailor the suggested next steps. You can skip optional fields.</p>
+  <div class="grid">
+    <div class="field"><label for="stage">Which best describes you right now?</label>
+      <select id="stage">
+        <option value="exploring">Exploring options / unsure what fits</option>
+        <option value="starting">Starting my first career or entering the workforce</option>
+        <option value="changing">Changing careers or industries</option>
+        <option value="returning">Returning to work after a break</option>
+        <option value="advancing">Advancing in my current field</option>
+        <option value="training">Looking for education, certification, or training</option>
+        <option value="selfemployed">Interested in self-employment or a business</option>
+      </select>
+    </div>
+    <div class="field"><label for="experience">Relevant work experience</label>
+      <select id="experience">
+        <option value="any">A mix of work, school, life, or volunteer experience</option>
+        <option value="limited">Limited formal work experience</option>
+        <option value="some">1–5 years</option>
+        <option value="experienced">6+ years</option>
+      </select>
+    </div>
+    <div class="field"><label for="training">Preferred preparation path</label>
+      <select id="training">
+        <option value="open">Open to different options</option>
+        <option value="short">Short course, certificate, or bootcamp</option>
+        <option value="onthejob">Paid training or learning on the job</option>
+        <option value="degree">College degree or longer formal study</option>
+        <option value="apprentice">Apprenticeship or hands-on trade training</option>
+        <option value="existing">Use skills I already have</option>
+      </select>
+    </div>
+    <div class="field"><label for="workstyle">Preferred work setting</label>
+      <select id="workstyle">
+        <option value="open">Open to different settings</option>
+        <option value="hands">Hands-on, on-site, or outdoors</option>
+        <option value="office">Office, structured workplace, or operations</option>
+        <option value="remote">Remote or primarily computer-based</option>
+        <option value="people">People-facing, service, or community setting</option>
+        <option value="mixed">A mix of independent and team work</option>
+      </select>
+    </div>
+  </div>
+</section>
+
+<section class="panel">
+  <h2>Part 2: Work activities you enjoy</h2>
+  <p>Rate each activity based on how much you would like doing it as part of a job—not just whether you can do it.</p>
+  <p class="muted"><strong>1</strong> = Strongly dislike · <strong>2</strong> = Dislike · <strong>3</strong> = Not sure / neutral · <strong>4</strong> = Like · <strong>5</strong> = Strongly like</p>
+  <div id="interestQuestions"></div>
+</section>
+
+<section class="panel">
+  <h2>Part 3: What matters in a job?</h2>
+  <p>Choose up to <strong>five</strong> factors that matter most to you in your next role. Select fewer if you prefer.</p>
+  <div id="valuesList" class="check-list">
+    <label><input type="checkbox" name="values" value="Stability"> Stable employment and predictable income</label>
+    <label><input type="checkbox" name="values" value="Income growth"> Higher earning potential</label>
+    <label><input type="checkbox" name="values" value="Flexibility"> Flexible schedule or location</label>
+    <label><input type="checkbox" name="values" value="Purpose"> Meaningful work or community impact</label>
+    <label><input type="checkbox" name="values" value="Creativity"> Creativity and room to experiment</label>
+    <label><input type="checkbox" name="values" value="Independence"> Independence and autonomy</label>
+    <label><input type="checkbox" name="values" value="Team"> Collaboration and supportive coworkers</label>
+    <label><input type="checkbox" name="values" value="Growth"> Learning, development, and advancement</label>
+    <label><input type="checkbox" name="values" value="Practical"> Hands-on work and visible results</label>
+    <label><input type="checkbox" name="values" value="Leadership"> Leadership and decision-making</label>
+    <label><input type="checkbox" name="values" value="Balance"> Work-life balance</label>
+    <label><input type="checkbox" name="values" value="Variety"> Variety and new challenges</label>
+  </div>
+  <p id="valuesCount" class="muted">0 of 5 selected</p>
+</section>
+
+<section class="panel">
+  <h2>Part 4: Skills and strengths you can build on</h2>
+  <p>Select skills you have used at work, school, in volunteering, at home, or in other responsibilities. You do not need to be an expert.</p>
+  <div id="skillsList" class="check-list">
+    <label><input type="checkbox" name="skills" value="Troubleshooting"> Troubleshooting and solving problems</label>
+    <label><input type="checkbox" name="skills" value="Digital tools"> Computers, software, or digital tools</label>
+    <label><input type="checkbox" name="skills" value="Communication"> Explaining ideas and communicating</label>
+    <label><input type="checkbox" name="skills" value="Customer service"> Customer service and supporting people</label>
+    <label><input type="checkbox" name="skills" value="Organization"> Organizing tasks, details, or schedules</label>
+    <label><input type="checkbox" name="skills" value="Analysis"> Research, analysis, or working with information</label>
+    <label><input type="checkbox" name="skills" value="Creativity"> Design, writing, or creative production</label>
+    <label><input type="checkbox" name="skills" value="Hands-on"> Repair, tools, equipment, or hands-on work</label>
+    <label><input type="checkbox" name="skills" value="Leadership"> Leading, coaching, or coordinating others</label>
+    <label><input type="checkbox" name="skills" value="Accuracy"> Accuracy, documentation, or quality checks</label>
+    <label><input type="checkbox" name="skills" value="Adaptability"> Adapting to change and learning quickly</label>
+    <label><input type="checkbox" name="skills" value="Numeracy"> Numbers, budgets, or quantitative tasks</label>
+  </div>
+  <div class="field" style="margin-top:16px"><label for="goal">Optional: What would you most like your next job to provide?</label>
+    <input id="goal" type="text" maxlength="180" placeholder="Example: steady hours, more growth, a hands-on job, or a career change">
+  </div>
+</section>
+
+<div class="panel">
+  <p><strong>Ready to review your profile?</strong> Answer all 30 interest statements for a more complete comparison. Your other selections are optional.</p>
+  <button type="button" id="resultsButton">Show My Career Exploration Results</button>
+  <button type="button" class="secondary" id="resetButton">Start Over</button>
+  <p id="validation" class="muted" role="status"></p>
+</div>
+</form>
+
+<section id="results" class="hidden" aria-live="polite"></section>
+<footer>
+  <p>Career exploration only. Career requirements, licensing, wages, job outlook, and training costs vary by location and employer. Verify details before making education or employment decisions. For a research-based interest profiler and occupational information, see <a href="https://www.mynextmove.org/" target="_blank" rel="noopener">My Next Move</a> and <a href="https://www.onetonline.org/" target="_blank" rel="noopener">O*NET OnLine</a>.</p>
+</footer>
+
+<script>
+const dimensions = {
+ R:{name:"Realistic — Practical & Hands-on",short:"Realistic",desc:"You may prefer practical activities involving tools, equipment, materials, physical systems, or visible results.",careers:["Electrician or apprentice","HVAC technician","Automotive service technician","Field service technician","Manufacturing or production technician","Construction or building trades","Equipment operator","Environmental field technician"],prep:"Explore apprenticeships, employer training, trade programs, safety credentials, and hands-on practice."},
+ I:{name:"Investigative — Analytical & Curious",short:"Investigative",desc:"You may enjoy researching questions, analyzing information, troubleshooting complex problems, and understanding how systems work.",careers:["Data analyst","Cybersecurity analyst","Laboratory technician","Quality assurance analyst","IT systems analyst","Research assistant","Environmental science technician","Business intelligence analyst"],prep:"Compare certificate and degree requirements, build a small portfolio or project, and review the tools used in target roles."},
+ A:{name:"Artistic — Creative & Expressive",short:"Artistic",desc:"You may enjoy creating original work, communicating ideas, designing experiences, or finding new ways to express information.",careers:["Graphic or digital designer","Content writer or editor","Video editor or producer","UX/UI designer","Marketing content specialist","Photographer","Multimedia specialist","Instructional content developer"],prep:"Build a portfolio, practice with relevant tools, and compare freelance, agency, nonprofit, and in-house roles."},
+ S:{name:"Social — Helping & Teaching",short:"Social",desc:"You may enjoy teaching, supporting, advising, listening, coordinating services, or helping people learn and succeed.",careers:["Training facilitator","Teacher or instructional aide","Community health worker","Career services specialist","Case management assistant","Customer success specialist","Youth program coordinator","Human resources or learning coordinator"],prep:"Check role-specific credentials, practice communication skills, and seek supervised volunteer, training, or entry-level experience."},
+ E:{name:"Enterprising — Leading & Persuading",short:"Enterprising",desc:"You may enjoy influencing decisions, launching initiatives, building relationships, selling ideas, or coordinating people toward a goal.",careers:["Sales or account representative","Project coordinator","Recruiter","Small business owner","Business development associate","Operations supervisor","Fundraising coordinator","Real estate professional"],prep:"Look for opportunities to lead a project, practice presenting and negotiation, and compare compensation models and licensing needs."},
+ C:{name:"Conventional — Organizing & Detail-focused",short:"Conventional",desc:"You may enjoy creating order, tracking information, following clear processes, maintaining records, and making operations reliable.",careers:["Administrative coordinator","Bookkeeping or payroll assistant","IT service desk coordinator","Inventory control specialist","Project administrator","Medical records specialist","Operations support specialist","Compliance assistant"],prep:"Strengthen spreadsheet, documentation, scheduling, and process skills; check whether roles require software or industry credentials."}
+};
+const questions = [
+["R","Repair or maintain equipment, tools, or physical systems."],
+["I","Investigate why a system, process, or result is not working as expected."],
+["A","Create visual designs, written content, videos, or other original work."],
+["S","Teach someone a skill or help them understand a difficult topic."],
+["E","Persuade others to consider an idea, service, or plan."],
+["C","Organize records, schedules, or information so others can use them accurately."],
+["R","Build, assemble, install, or improve something tangible."],
+["I","Compare evidence and data before deciding what a problem means."],
+["A","Find an original way to communicate a message or solve a creative challenge."],
+["S","Listen to someone’s needs and help them identify useful next steps."],
+["E","Lead a team, coordinate a project, or make decisions toward a goal."],
+["C","Follow a process carefully and check work for errors or missing details."],
+["R","Work with tools, machines, devices, materials, or equipment."],
+["I","Learn how technical, scientific, or business systems work beneath the surface."],
+["A","Improve the look, feel, wording, or user experience of a product or service."],
+["S","Support people who are learning, navigating a challenge, or accessing a service."],
+["E","Build professional relationships, negotiate, or develop new opportunities."],
+["C","Maintain budgets, inventories, databases, forms, or other structured records."],
+["R","Prefer a workday that includes movement, fieldwork, or hands-on tasks."],
+["I","Test possible solutions and use the results to decide what to try next."],
+["A","Work on projects where style, storytelling, or originality matters."],
+["S","Coordinate activities that help a group, customer, student, or community."],
+["E","Present recommendations or take responsibility for a project’s outcome."],
+["C","Create checklists, standards, or repeatable steps that make work more reliable."],
+["R","Diagnose a practical problem and make or carry out a repair."],
+["I","Study a complicated question for long enough to understand its causes."],
+["A","Develop new concepts, designs, or content from an initial idea."],
+["S","Coach, mentor, advise, or encourage someone toward a goal."],
+["E","Set priorities, manage resources, or motivate others to take action."],
+["C","Work with precise details where consistency, accuracy, and documentation matter."]
+];
+const qRoot = document.getElementById("interestQuestions");
+questions.forEach((q,i)=>{
+  const section=document.createElement("section");
+  section.className="question";
+  const fieldset=document.createElement("fieldset");
+  const legend=document.createElement("legend");
+  legend.innerHTML='<span class="question-number">ACTIVITY '+(i+1)+' OF '+questions.length+'</span><br>'+q[1];
+  fieldset.appendChild(legend);
+  const scale=document.createElement("div"); scale.className="scale";
+  const labels=["Strongly dislike","Dislike","Neutral / unsure","Like","Strongly like"];
+  labels.forEach((word,j)=>{
+    const label=document.createElement("label");
+    const input=document.createElement("input");
+    input.type="radio";input.name="interest"+i;input.value=String(j+1);input.required=true;
+    input.addEventListener("change",updateProgress);
+    label.appendChild(input);
+    label.appendChild(document.createTextNode(String(j+1)));
+    const span=document.createElement("span");span.className="scale-word";span.textContent=word;
+    label.appendChild(span);scale.appendChild(label);
+  });
+  fieldset.appendChild(scale);section.appendChild(fieldset);qRoot.appendChild(section);
+});
+function updateProgress(){
+ const count=questions.filter((_,i)=>document.querySelector('input[name="interest'+i+'"]:checked')).length;
+ document.getElementById("progressBar").style.width=(count/questions.length*100)+"%";
+ document.getElementById("progressText").textContent=count+" of "+questions.length+" interest statements answered";
+}
+document.querySelectorAll('input[name="values"]').forEach(el=>el.addEventListener("change",()=>{
+ const selected=[...document.querySelectorAll('input[name="values"]:checked')];
+ if(selected.length>5){el.checked=false;document.getElementById("valuesCount").textContent="Maximum 5 selections. Please unselect one before choosing another.";return;}
+ document.getElementById("valuesCount").textContent=selected.length+" of 5 selected";
+}));
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function showResults(){
+ const answered=questions.filter((_,i)=>document.querySelector('input[name="interest'+i+'"]:checked')).length;
+ if(answered<questions.length){
+   document.getElementById("validation").textContent="Please answer all 30 interest statements. You have answered "+answered+" of 30.";
+   const firstMissing=questions.findIndex((_,i)=>!document.querySelector('input[name="interest'+i+'"]:checked'));
+   document.querySelectorAll(".question")[firstMissing].scrollIntoView({behavior:"smooth",block:"center"});
+   return;
+ }
+ const scores={R:0,I:0,A:0,S:0,E:0,C:0};
+ questions.forEach((q,i)=>{scores[q[0]]+=Number(document.querySelector('input[name="interest'+i+'"]:checked').value);});
+ const max=5*questions.filter(q=>q[0]==="R").length;
+ const sorted=Object.keys(scores).sort((a,b)=>scores[b]-scores[a]);
+ const top=sorted.slice(0,3);
+ const values=[...document.querySelectorAll('input[name="values"]:checked')].map(e=>e.value);
+ const skills=[...document.querySelectorAll('input[name="skills"]:checked')].map(e=>e.value);
+ const stage=document.getElementById("stage").selectedOptions[0].text;
+ const training=document.getElementById("training").selectedOptions[0].text;
+ const workstyle=document.getElementById("workstyle").selectedOptions[0].text;
+ const experience=document.getElementById("experience").selectedOptions[0].text;
+ const goal=document.getElementById("goal").value.trim();
+ let html='<div class="panel"><div class="eyebrow">Your personalized summary</div><h1>Your Career Exploration Profile</h1>';
+ html+='<p>Your highest interest areas are listed first. The scores reflect your answers about activities you may enjoy; they are not grades or measures of ability.</p>';
+ html+='<p><strong>Your interest pattern:</strong> '+top.map(k=>dimensions[k].short).join(' · ')+'</p>';
+ html+='<div class="notice"><strong>How to use this:</strong> Start with the top two or three areas, then compare the suggested jobs against your values, skills, preferred work setting, and training options.</div></div>';
+ html+='<div class="result-card"><h2>Interest score overview</h2>';
+ sorted.forEach(k=>{html+='<div class="score-row"><div class="score-label"><span>'+dimensions[k].name+'</span><span>'+scores[k]+' / '+max+'</span></div><div class="bar"><span style="width:'+((scores[k]/max)*100)+'%"></span></div></div>';});
+ html+='<p class="muted">Each interest area has '+(max/5)+' activities. Scores are sums of your 1–5 ratings, so compare the six areas rather than treating any one score as a pass/fail result.</p></div>';
+ html+='<div class="two-col">';
+ top.forEach((k,i)=>{html+='<div class="result-card"><div class="eyebrow">Match '+(i+1)+'</div><h2>'+dimensions[k].name+'</h2><p>'+dimensions[k].desc+'</p><h3>Career ideas to investigate</h3><ul>'+dimensions[k].careers.map(c=>'<li>'+c+'</li>').join('')+'</ul><h3>Possible next step</h3><p>'+dimensions[k].prep+'</p></div>';});
+ html+='</div>';
+ html+='<div class="result-card"><h2>Your work values</h2>';
+ html+=values.length?'<p>You selected these priorities:</p>'+values.map(v=>'<span class="tag">'+esc(v)+'</span>').join(''):'<p>You did not select work values. Consider choosing the five factors that matter most before narrowing your options.</p>';
+ html+='<p class="small">Use these priorities to compare real job postings. For example, a career can be interesting but still not fit your schedule, income needs, preferred setting, or desired training commitment.</p></div>';
+ html+='<div class="result-card"><h2>Transferable skills you can build on</h2>';
+ html+=skills.length?'<p>Your selected skills include:</p>'+skills.map(s=>'<span class="tag">'+esc(s)+'</span>').join(''):'<p>You did not select skills yet. Think about paid work, school, caregiving, volunteering, hobbies, and responsibilities where you solved problems or helped others.</p>';
+ html+='<p>Transferable skills can come from many parts of life. Match them to job descriptions, then identify one or two skills to demonstrate in a résumé, interview, project, or portfolio.</p></div>';
+ html+='<div class="result-card"><h2>Practical next steps for you</h2><ul>';
+ html+='<li><strong>Current goal:</strong> '+esc(stage)+'.</li><li><strong>Experience:</strong> '+esc(experience)+'.</li><li><strong>Training preference:</strong> '+esc(training)+'.</li><li><strong>Work setting:</strong> '+esc(workstyle)+'.</li>';
+ if(goal)html+='<li><strong>Your stated goal:</strong> '+esc(goal)+'.</li>';
+ html+='<li>Choose two career titles from your top interest areas and read several current job descriptions for each.</li><li>Record common skills, credentials, schedule expectations, and experience requirements across those postings.</li><li>Find one low-risk way to test the work: an informational interview, short course, volunteer task, job shadow, sample project, or introductory workshop.</li><li>Check local pay ranges, demand, licensing, training cost, and time to entry before committing to a program.</li></ul></div>';
+ html+='<div class="result-card"><h2>Career research links</h2><ul><li><a href="https://www.mynextmove.org/" target="_blank" rel="noopener">My Next Move</a> — explore occupations and interests.</li><li><a href="https://www.onetonline.org/" target="_blank" rel="noopener">O*NET OnLine</a> — review tasks, skills, work context, and occupation details.</li><li><a href="https://www.careeronestop.org/" target="_blank" rel="noopener">CareerOneStop</a> — research training, career pathways, and job-search resources.</li><li><a href="https://www.apprenticeship.gov/" target="_blank" rel="noopener">Apprenticeship.gov</a> — explore earn-while-you-learn options.</li></ul></div>';
+ html+='<div class="panel no-print"><button type="button" onclick="window.print()">Print or Save Results as PDF</button><button type="button" class="secondary" onclick="window.scrollTo({top:0,behavior:\'smooth\'})">Back to top</button><button type="button" class="secondary" onclick="resetAssessment()">Retake Assessment</button><p class="muted">Your answers are not saved to a server. Printing is the way to keep a copy of these results.</p></div>';
+ const root=document.getElementById("results");root.innerHTML=html;root.classList.remove("hidden");document.getElementById("validation").textContent="";root.scrollIntoView({behavior:"smooth"});
+}
+function resetAssessment(){
+ document.getElementById("assessmentForm").reset();
+ document.getElementById("results").innerHTML="";document.getElementById("results").classList.add("hidden");
+ document.getElementById("validation").textContent="";
+ document.getElementById("valuesCount").textContent="0 of 5 selected";
+ updateProgress();window.scrollTo({top:0,behavior:"smooth"});
+}
+document.getElementById("resultsButton").addEventListener("click",showResults);
+document.getElementById("resetButton").addEventListener("click",resetAssessment);
+</script>
+</body>
+</html>
